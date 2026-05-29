@@ -1,0 +1,55 @@
+name: lootlo
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http: ^1.6.0
+  flutter_secure_storage: ^10.3.0
+  google_fonts: ^8.1.0
+  image_picker: ^1.2.2
+  geolocator: ^14.0.1
+  cached_network_image: ^3.4.1
+  provider: ^6.1.5+1
+  shared_preferences: ^2.5.5
+  geocoding: ^4.0.0
+  flutter_map: ^8.3.0
+  latlong2: ^0.9.1
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
+
+flutter:
+  uses-material-design: true
+
+  # This is where your logo and future images will live
+  assets:
+    - assets/images/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21 # Required for modern Android icons'
+
+
+flutter_native_splash:
+  color: "#FFFFFF" # Clean white background
+  image: "assets/images/logo.png"
+  # Android 12+ requires a specific setup
+  android_12:
+    image: "assets/images/logo.png"
+    color: "#FFFFFF"
