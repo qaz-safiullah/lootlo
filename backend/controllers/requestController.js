@@ -119,14 +119,17 @@ const getReceivedRequests = async (req, res) => {
         const query = `
             SELECT r.id as request_id, r.status as request_status, r.proposed_time, r.giver_confirmed, r.taker_confirmed,
                    i.title as item_title, i.id as item_id, 
-                   u.name as requester_name, u.phone as requester_phone, u.community_score as requester_score
+                   u.name as requester_name, u.community_score as requester_score
             FROM requests r JOIN items i ON r.item_id = i.id JOIN users u ON r.requester_id = u.id
             WHERE i.user_id = ? AND r.status != 'rejected'
-            ORDER BY r.created_at DESC
+            ORDER BY r.id DESC
         `;
         const [requests] = await db.query(query, [req.user.id]);
         res.status(200).json({ success: true, data: requests });
-    } catch (error) { res.status(500).json({ success: false }); }
+    } catch (error) { 
+        console.error('Error in getReceivedRequests:', error);
+        res.status(500).json({ success: false, error: error.message }); 
+    }
 };
 
 const getMyRequests = async (req, res) => {
@@ -134,14 +137,17 @@ const getMyRequests = async (req, res) => {
         const query = `
             SELECT r.id as request_id, r.status as request_status, r.proposed_time, r.giver_confirmed, r.taker_confirmed,
                    i.title as item_title, i.id as item_id, i.address, 
-                   u.name as giver_name, u.phone as giver_phone
+                   u.name as giver_name
             FROM requests r JOIN items i ON r.item_id = i.id JOIN users u ON i.user_id = u.id
             WHERE r.requester_id = ? AND r.status != 'rejected'
-            ORDER BY r.created_at DESC
+            ORDER BY r.id DESC
         `;
         const [requests] = await db.query(query, [req.user.id]);
         res.status(200).json({ success: true, data: requests });
-    } catch (error) { res.status(500).json({ success: false }); }
+    } catch (error) { 
+        console.error('Error in getMyRequests:', error);
+        res.status(500).json({ success: false, error: error.message }); 
+    }
 };
 
 const cancelRequest = async (req, res) => {

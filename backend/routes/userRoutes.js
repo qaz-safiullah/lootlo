@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { signup, login, getProfile, updateProfile, changePassword, resetPassword } = require('../controllers/authController');
+// IMPORTANT: Make sure you import deleteAccount here!
+const { 
+    signup, login, getProfile, updateProfile, changePassword, resetPassword, deleteAccount 
+} = require('../controllers/authController');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Public Routes
 router.post('/signup', signup);
 router.post('/login', login);
+router.post('/reset-password', resetPassword);
 
-// Protected Routes (Requires JWT token)
+// Protected Routes
 router.get('/me', protect, getProfile);
+router.delete('/me', protect, deleteAccount); // <-- ADD THIS LINE
 
-// Add these to your protected userRoutes.js block
 router.put('/profile', protect, updateProfile);
 router.post('/change-password', protect, changePassword);
-
-router.post('/reset-password', resetPassword);
 
 module.exports = router;

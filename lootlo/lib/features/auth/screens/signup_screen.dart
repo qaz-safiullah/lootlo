@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../services/auth_service.dart';
+// Add this to your imports:
+import '../../home/screens/main_layout.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -30,7 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Future<void> _handleSignup() async {
+Future<void> _handleSignup() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
@@ -43,8 +45,16 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _isLoading = false);
 
     if (response.success && mounted) {
-      _showToast('Account Created! Routing to Home...');
-      // Navigation will go here later
+      _showToast('Welcome to Lootlo! 🎉');
+      
+      // --- THE REDIRECTION FIX ---
+      // We push to MainLayout and remove all previous routes (Signup/Login)
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainLayout()), // Ensure you import MainLayout
+        (route) => false,
+      );
+      
     } else if (mounted) {
       _showToast(response.message, isError: true);
     }

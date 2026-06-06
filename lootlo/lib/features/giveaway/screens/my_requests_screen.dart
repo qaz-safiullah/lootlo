@@ -116,6 +116,7 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
       color: AppColors.primary,
       onRefresh: _fetchAllRequests,
       child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(), // Added to ensure pull-to-refresh works on short lists
         padding: const EdgeInsets.all(16),
         itemCount: items.length,
         itemBuilder: (context, index) => isSent ? _buildSentCard(items[index], isDark) : _buildReceivedCard(items[index], isDark),
@@ -124,13 +125,24 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
   }
 
   Widget _buildEmptyState(bool isDark) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(CupertinoIcons.doc_text_search, size: 80, color: isDark ? Colors.grey[800] : Colors.grey[300]),
-          const SizedBox(height: 16),
-          Text('No Active Requests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+    return RefreshIndicator(
+      color: AppColors.primary,
+      onRefresh: _fetchAllRequests,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(), // Added to ensure pull-to-refresh works on empty state
+        slivers: [
+          SliverFillRemaining(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(CupertinoIcons.doc_text_search, size: 80, color: isDark ? Colors.grey[800] : Colors.grey[300]),
+                  const SizedBox(height: 16),
+                  Text('No Active Requests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

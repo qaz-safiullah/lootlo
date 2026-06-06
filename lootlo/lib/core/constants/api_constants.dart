@@ -2,7 +2,7 @@ class ApiConstants {
   // ----------------------------------------------------------------------
   // YOUR LAPTOP'S IP ADDRESS
   // ----------------------------------------------------------------------
-  static const String baseUrl = 'http://192.168.0.107:3000/api'; 
+  static const String baseUrl = 'http://192.168.0.114:3000/api'; 
 
   // Auth Endpoints
   static const String signupEndpoint = '$baseUrl/users/signup';

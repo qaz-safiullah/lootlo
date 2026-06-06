@@ -97,7 +97,7 @@ const login = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         // req.user.id comes from our protect middleware!
-        const [rows] = await db.query('SELECT id, name, email, phone, community_score, lat, lng FROM users WHERE id = ?', [req.user.id]);
+        const [rows] = await db.query('SELECT id, name, email, community_score FROM users WHERE id = ?', [req.user.id]);
         
         if (rows.length === 0) {
             return res.status(404).json({ success: false, error: 'User not found.' });
@@ -118,7 +118,7 @@ const updateProfile = async (req, res) => {
 
     try {
         await db.query(
-            'UPDATE users SET name = COALESCE(?, name), phone = COALESCE(?, phone) WHERE id = ?',
+            'UPDATE users SET name = COALESCE(?, name), WHERE id = ?',
             [name, phone, userId]
         );
         res.status(200).json({ success: true, message: 'Profile updated successfully.' });
@@ -190,6 +190,22 @@ const resetPassword = async (req, res) => {
 };
 
 
+// @desc    Delete user account
+// @route   DELETE /api/users/me
+const deleteAccount = async (req, res) => {
+    const userId = req.user.id;
 
-// DON'T FORGET to export them:
-module.exports = { signup, login, getProfile, updateProfile, changePassword, resetPassword };
+    try {
+        // Because of your database foreign key constraints (ON DELETE CASCADE),
+        // deleting the user will automatically remove their items, requests, and wishlist items.
+        await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
+        res.status(200).json({ success: true, message: 'Account deleted successfully.' });
+    } catch (error) {
+        console.error('Delete Account Error:', error);
+        res.status(500).json({ success: false, error: 'Server error deleting account.' });
+    }
+};
+
+// Don't forget to add deleteAccount to your module.exports at the bottom!
+module.exports = { signup, login, getProfile, updateProfile, changePassword, resetPassword, deleteAccount };

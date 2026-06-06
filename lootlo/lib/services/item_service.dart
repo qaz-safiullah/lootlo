@@ -139,7 +139,7 @@ class ItemService {
     required double lng,
     String category = 'All',
     String keyword = '',    // <-- Added Keyword
-    int radius = 20,        // <-- Added Radius
+    int radius = 100,        // <-- Added Radius
   }) async {
     try {
       final token = await _storage.read(key: 'token');
